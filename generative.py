@@ -157,8 +157,26 @@ def get_size(seed:t_size|None = None)->t_size:
     
         return temp
 
+def get_pos(seed:t_pos|None = None)->t_pos:
+    max_height:int = 1080
+    max_width:int  = 1728
+    xbound:int = max_width//10
+    ybound:int = max_height//10
+    if seed == None:
+        return (numpy.random.randint(max_width),numpy.random.randint(max_height))
+    else:
+        #Allow for +-10% difference from seed 
+        temp:t_size = (numpy.random.randint(-xbound, xbound)+seed[0],numpy.random.randint(-ybound,ybound)+seed[1])
+        if temp[0] < 0:
+            temp:t_size = (0,temp[1])
+        elif temp[0] > max_width:
+            temp:t_size = (max_width, temp[1])
+        if temp[1] < 0:
+            temp:t_size = (temp[0], 0)
+        elif temp[1] > max_height:
+            temp:t_size = (temp[0], max_height)
     
-    return (numpy.random.randint(),numpy.random.randint())
+        return temp    
 
 def process(base:MatLike, goal:MatLike)->Species:
     '''
